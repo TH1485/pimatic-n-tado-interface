@@ -69,7 +69,7 @@ module.exports = (env) ->
         env.logger.debug('stderr: ' + data)
       )
       py.stdout.on('end', () =>
-        if !dataString 
+        if dataString 
           try
             jsonData = JSON.parse(dataString)
             @_temperature = jsonData.temperature
