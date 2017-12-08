@@ -8,11 +8,10 @@ module.exports = {
       zone:
         description: "Zone id"
         type: "integer"
-        required: true
+        default: 1
       interval:
-        interval: "Interval in ms to interace with Tado web, the minimal reading interval should be 60000 (1 min)"
+        description: "Interval in ms to interace with Tado web, the minimal reading interval should be 60000 (1 min)"
         type: "integer"
         default: 60000
-        required: true
-  }
+    }
 }
