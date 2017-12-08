@@ -69,13 +69,14 @@ module.exports = (env) ->
         env.logger.debug('stderr: ' + data)
       )
       py.stdout.on('end', () =>
-        try
-          jsonData = JSON.parse(dataString)
-          @_temperature = jsonData.temperature
-          @_humidity = jsonData.humidity
-        catch err
-          env.logger.error("Error reading Tado-data: #{err.message}")
-          env.logger.debug(err.stack)
+        if not dataString='' 
+          try
+            jsonData = JSON.parse(dataString)
+            @_temperature = jsonData.temperature
+            @_humidity = jsonData.humidity
+          catch err
+            env.logger.error("Error reading Tado-data: #{err.message}; data: [#{dataString}]")
+            env.logger.debug(err.stack)
           
         @emit "temperature", @_temperature
         @emit "humidity", @_humidity
