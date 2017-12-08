@@ -2,7 +2,7 @@
   "name": "pimatic-tado-interface",
   "description": "pimatic interface with Tado Thermostat api",
   "author": "TH1485",
-  "contributer": "Chris Jewell chrism0dwk@gmail.com",
+  "contributers": "Chris Jewell chrism0dwk@gmail.com",
   "main": "tado-interface",
   "files": [
     "tado-interface.coffee",
@@ -38,5 +38,5 @@
     "pimatic",
     "tado"
   ],
-  "license": "GPL-2.0"
+  "license": "GPL-3.0"
 }
