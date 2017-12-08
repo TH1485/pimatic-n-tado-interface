@@ -1,0 +1,42 @@
+{
+  "name": "pimatic-tado-interface",
+  "description": "pimatic interface with Tado Thermostat api",
+  "author": "TH1485",
+  "contributer": "Chris Jewell chrism0dwk@gmail.com",
+  "main": "tado-interface",
+  "files": [
+    "tado-interface.coffee",
+    "README.md",
+    "tado-interface-config-schema.coffee",
+    "device-config-schema.coffee",
+    "interface.py",
+    "getClimate.py"
+  ],
+  "version": "0.0.1",
+  "homepage": "http://github.com/TH1485/pimatic-tado-interface",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/TH1485/pimatic-tado-interface.git"
+  },
+  "configSchema": "tado-interface-config-schema.coffee",
+  "dependencies": {
+   },
+  "peerDependencies": {
+    "pimatic": ">=0.8.0 <1.0.0"
+  },
+  "engines": {
+    "node": ">0.8.x",
+    "npm": ">1.1.x"
+  },
+  "bugs": {
+   },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "pimatic",
+    "tado"
+  ],
+  "license": "GPL-2.0"
+}
