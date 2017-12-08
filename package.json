@@ -12,7 +12,7 @@
     "interface.py",
     "getClimate.py"
   ],
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "http://github.com/TH1485/pimatic-tado-interface",
   "repository": {
     "type": "git",
