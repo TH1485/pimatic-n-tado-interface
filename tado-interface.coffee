@@ -73,9 +73,9 @@ module.exports = (env) ->
           jsonData = JSON.parse(dataString)
           @_temperature = jsonData.temperature
           @_humidity = jsonData.humidity
-        catch (e)
-          env.logger.error("Error reading Tado-data: #{e.message}")
-          env.logger.debug(e.stack)
+        catch err
+          env.logger.error("Error reading Tado-data: #{err.message}")
+          env.logger.debug(err.stack)
           
         @emit "temperature", @_temperature
         @emit "humidity", @_humidity
