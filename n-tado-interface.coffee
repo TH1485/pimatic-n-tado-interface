@@ -5,7 +5,7 @@ module.exports = (env) ->
   
   # Require the [cassert library](https://github.com/rhoot/cassert).
   assert = env.require 'cassert'
-  commons = require('pimatic-plugin-commons')(env)
+  #commons = require('pimatic-plugin-commons')(env)
   # Require node-tado (https://github.com/dVelopment/node-tado/)
   tadoClient = env.require 'node-tado';
   
@@ -13,7 +13,7 @@ module.exports = (env) ->
 
     init: (app, @framework, @config) =>
       
-      @base = commons.base @, 'TadoPlugin'
+      #@base = commons.base @, 'TadoPlugin'
       
       let client = new tadoClient();
       #connect to tado
