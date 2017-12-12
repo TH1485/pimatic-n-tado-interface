@@ -1,4 +1,4 @@
-pimatic-tado-interface
+pimatic-n-tado-interface
 ================
 
 Currently Support for:
@@ -12,7 +12,7 @@ Add the plugin to the plugin section:
 
 ```json
 { 
-  "plugin": "tado-interface",
+  "plugin": "n-tado-interface",
   "login" : "mylogin@email.com",
   "password" : "mypassword"
 }
@@ -22,7 +22,7 @@ to device section
 {
   "id": "mylivingroom",
   "name": "My Living Room",
-  "class": "TadoClimate",
+  "class": "ZoneClimate",
   "zone": 1,
   "interval": 60000
  }
