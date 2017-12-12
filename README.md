@@ -24,6 +24,6 @@ to device section
   "name": "My Living Room",
   "class": "ZoneClimate",
   "zone": 1,
-  "interval": 60000
+  "interval": 120000
  }
 ```
