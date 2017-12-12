@@ -4,7 +4,7 @@ pimatic-n-tado-interface
 Currently Support for:
 - Tado temperature and humidity readout via the public preview api.
 
-**This plugin uses the python interface PyTado, written by Chris Jewell chrism0dwk@gmail.com - > https://github.com/chrism0dwk/PyTado
+**This plugin uses the node-tado, (https://github.com/dVelopment/node-tado)
 
 ### Plugin Configuration
 
