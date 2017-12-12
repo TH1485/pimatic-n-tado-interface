@@ -29,8 +29,8 @@ module.exports = (env) ->
       ).catch((err) =>
         env.logger.error('Error on connecting to tado: #{err.message}')
         env.logger.debug(err.stack)
-        return
       )
+
      
       deviceConfigDef = require("./device-config-schema")
 
