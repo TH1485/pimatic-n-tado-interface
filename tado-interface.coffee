@@ -9,7 +9,7 @@ module.exports = (env) ->
   # Require node-tado (https://github.com/dVelopment/node-tado/)
   tadoClient = env.require 'node-tado';
   
-  class TadoPlugin extends env.plugins.Plugin
+  class TadoPlugin2 extends env.plugins.Plugin
 
     init: (app, @framework, @config) =>
       
@@ -33,16 +33,16 @@ module.exports = (env) ->
      
       deviceConfigDef = require("./device-config-schema")
 
-      @framework.deviceManager.registerDeviceClass("TadoClimate", {
-        configDef: deviceConfigDef.TadoClimate,
+      @framework.deviceManager.registerDeviceClass("ZoneClimate", {
+        configDef: deviceConfigDef.ZoneClimate,
         createCallback: (config, lastState) ->
-          device = new TadoClimate(config, lastState)
+          device = new ZoneClimate(config, lastState)
           return device
       })
  
-  plugin = new TadoPlugin
+  plugin = new TadoPlugin2
 
-  class TadoClimate extends env.devices.TemperatureSensor
+  class ZoneClimate extends env.devices.TemperatureSensor
     _temperature: null
     _humidity: null
 
