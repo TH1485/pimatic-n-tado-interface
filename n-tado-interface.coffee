@@ -21,13 +21,14 @@ module.exports = (env) ->
         env.logger.debug "Login established, connected with tado webinterface"
         return client.me().then((home_info) =>
           try 
-            @home = JSON.parse(home_info).homes[0]
+            jsonHome = JSON.parse(home_info)
+            @home = jsonHome.homes[0]
             env.logger.debug('Acquired home: '  + JSON.stringify(@home))
           catch (e)
             throw e
       ).catch((err) =>
-        env.logger.error "Error on connecting to tado: #{err.message}"
-        env.logger.debug err.stack
+        env.logger.error('Error on connecting to tado: #{err.message}')
+        env.logger.debug(err.stack)
         return
       )
      
@@ -82,7 +83,7 @@ module.exports = (env) ->
         @emit "temperature", @_temperature
         @emit "humidity", @_humidity
       ).catch((err) =>
-        env.logger.error("Error reading Tado-state of zone #{@zone}: #{err.message};]")
+        env.logger.error("Error reading Tado-state of zone #{@zone}: #{err.message}")
         env.logger.debug(err.stack)
       )
 
