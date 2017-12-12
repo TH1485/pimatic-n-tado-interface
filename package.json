@@ -1,5 +1,5 @@
 {
-  "name": "pimatic-tado-interface",
+  "name": "pimatic-n-tado-interface",
   "description": "pimatic interface Tado Thermostat api through node-tado",
   "author": "TH1485",
   "contributers": "",
