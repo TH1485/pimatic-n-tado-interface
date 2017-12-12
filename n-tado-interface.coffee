@@ -7,7 +7,7 @@ module.exports = (env) ->
   assert = env.require 'cassert'
   #commons = require('pimatic-plugin-commons')(env)
   # Require node-tado (https://github.com/dVelopment/node-tado/)
-  tadoClient = env.require 'node-tado';
+  tadoClient = env.require 'node-tado'
   
   class TadoPlugin2 extends env.plugins.Plugin
 
@@ -15,7 +15,7 @@ module.exports = (env) ->
       
       #@base = commons.base @, 'TadoPlugin'
       
-      let client = new tadoClient();
+      let client = new tadoClient()
       #connect to tado
       client.login(@config.loginname, @config.password).then((resolve) => 
         env.logger.debug "Login established, connected with tado webinterface"
