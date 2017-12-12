@@ -12,6 +12,6 @@ module.exports = {
       interval:
         description: "Interval in ms to interace with Tado web, the minimal reading interval should be 60000 (1 min)"
         type: "integer"
-        default: 60000
+        default: 120000
     }
 }
