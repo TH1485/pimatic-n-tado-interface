@@ -15,7 +15,7 @@ module.exports = (env) ->
       
       #@base = commons.base @, 'TadoPlugin'
       
-      let client = new tadoClient()
+      client = new tadoClient()
       #connect to tado
       client.login(@config.loginname, @config.password).then((resolve) => 
         env.logger.debug "Login established, connected with tado webinterface"
