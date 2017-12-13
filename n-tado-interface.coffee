@@ -11,19 +11,6 @@ module.exports = (env) ->
 
     init: (app, @framework, @config) =>
       
-      deviceConfigDef = require("./device-config-schema")
-
-      @framework.deviceManager.registerDeviceClass("ZoneClimate", {
-        configDef: deviceConfigDef.ZoneClimate,
-        createCallback: (config, lastState) ->
-          device = new ZoneClimate(config, lastState)
-          return device
-      })
-
-      @loginname = @config.loginname
-      @password = @config.password
-
-      
       client = new tadoClient
 
       client.login(@loginname, @password).then((connected) =>
@@ -38,6 +25,20 @@ module.exports = (env) ->
          env.logger.error('Error on connecting to tado: #{err.message}')
          env.logger.debug(err.stack)
       )
+       
+      deviceConfigDef = require("./device-config-schema")
+
+      @framework.deviceManager.registerDeviceClass("ZoneClimate", {
+        configDef: deviceConfigDef.ZoneClimate,
+        createCallback: (config, lastState) ->
+          device = new ZoneClimate(config, lastState)
+          return device
+      })
+
+      @loginname = @config.loginname
+      @password = @config.password
+
+      
  
   plugin = new TadoPlugin2
 
