@@ -29,7 +29,7 @@ modules.exports = ->
           resolve true
         return
       return
-)
+  )
 
   saveToken = (token) ->
     @token = token
@@ -57,7 +57,7 @@ modules.exports = ->
           resolve true
         return
       return
-)
+  )
 
   api = (path) ->
     @refreshToken().then ->
@@ -74,7 +74,7 @@ modules.exports = ->
             resolve result
           return
         return
-)
+  )
 
   me = ->
     @api '/me'
