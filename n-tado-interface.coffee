@@ -5,9 +5,6 @@ module.exports = (env) ->
   
   # Require the [cassert library](https://github.com/rhoot/cassert).
   assert = env.require 'cassert'
-  #commons = require('pimatic-plugin-commons')(env)
-  # Require node-tado (https://github.com/dVelopment/node-tado/)
-  tadoClient = require('node-tado').default
 
   class TadoPlugin2 extends env.plugins.Plugin
 
@@ -25,6 +22,7 @@ module.exports = (env) ->
     @loginname = @config.loginname
     @password = @config.password
       
+    tadoClient = require('node-tado').default
     client = new tadoClient
     
     client.login(@loginname, @password).then((connected) =>
