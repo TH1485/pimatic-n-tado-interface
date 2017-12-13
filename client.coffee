@@ -8,7 +8,7 @@ CLIENT_ID = 'tado-web-app'
 CLIENT_SECRET = 'wZaRN7rpjn3FoNyF5IFuxg9uMzYJcvOoQ8QWiIqS3hfk6gLhVlG57j5YNoZL2Rtc'
 REFERER = 'https://my.tado.com/'
 
-modules.exports = ->
+module.exports = ->
  
   class client 
     login = (username, password) ->
