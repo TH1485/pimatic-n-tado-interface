@@ -15,7 +15,7 @@ module.exports = (env) ->
       
       #@base = commons.base @, 'TadoPlugin'
       
-    client = new tadoClient()
+    client = new tadoClient
          #connect to tado
     logint="test"
     pwdt = "test"
