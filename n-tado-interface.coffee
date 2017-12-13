@@ -5,38 +5,39 @@ module.exports = (env) ->
   
   # Require the [cassert library](https://github.com/rhoot/cassert).
   assert = env.require 'cassert'
+  tadoClient = require('node-tado').default
 
   class TadoPlugin2 extends env.plugins.Plugin
 
     init: (app, @framework, @config) =>
       
-    deviceConfigDef = require("./device-config-schema")
+      deviceConfigDef = require("./device-config-schema")
 
-    @framework.deviceManager.registerDeviceClass("ZoneClimate", {
-      configDef: deviceConfigDef.ZoneClimate,
-      createCallback: (config, lastState) ->
-        device = new ZoneClimate(config, lastState)
-        return device
-    })
-    
-    @loginname = @config.loginname
-    @password = @config.password
+      @framework.deviceManager.registerDeviceClass("ZoneClimate", {
+        configDef: deviceConfigDef.ZoneClimate,
+        createCallback: (config, lastState) ->
+          device = new ZoneClimate(config, lastState)
+          return device
+      })
+
+      @loginname = @config.loginname
+      @password = @config.password
+
       
-    tadoClient = require('node-tado').default
-    client = new tadoClient
-    
-    client.login(@loginname, @password).then((connected) =>
-      env.logger.debug "Login established, connected with tadowebinterface"
-      client.me().then((home_info) =>
-        jsonHome = JSON.parse(home_info)
-        @home = jsonHome.homes[0]
-        env.logger.debug('Acquired home: '  + JSON.stringify(@home))
-        resolve(connected)
+      client = new tadoClient
+
+      client.login(@loginname, @password).then((connected) =>
+        env.logger.debug "Login established, connected with tadowebinterface"
+        client.me().then((home_info) =>
+          jsonHome = JSON.parse(home_info)
+          @home = jsonHome.homes[0]
+          env.logger.debug('Acquired home: '  + JSON.stringify(@home))
+          resolve(connected)
+        )
+      ).catch((err) =>
+         env.logger.error('Error on connecting to tado: #{err.message}')
+         env.logger.debug(err.stack)
       )
-    ).catch((err) =>
-       env.logger.error('Error on connecting to tado: #{err.message}')
-       env.logger.debug(err.stack)
-    )
  
   plugin = new TadoPlugin2
 
