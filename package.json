@@ -19,6 +19,7 @@
   },
   "configSchema": "n-tado-interface-config-schema.coffee",
   "dependencies": {
+    "node-tado": "0.0.2"
   },
   "peerDependencies": {
     "pimatic": ">=0.8.0 <1.0.0"
