@@ -8,7 +8,6 @@ CLIENT_SECRET = 'wZaRN7rpjn3FoNyF5IFuxg9uMzYJcvOoQ8QWiIqS3hfk6gLhVlG57j5YNoZL2Rt
 REFERER = 'https://my.tado.com/'
 
 modules.exports = ->
-
   login = (username, password) ->
     new Promise((resolve, reject) ->
       request.post {
