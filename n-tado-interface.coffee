@@ -24,8 +24,9 @@ module.exports = (env) ->
             jsonHome = JSON.parse(home_info)
             @home = jsonHome.homes[0]
             env.logger.debug('Acquired home: '  + JSON.stringify(@home))
+            resolve()
           catch (e)
-            throw e
+            reject(e)
         )
       ).catch((err) =>
         env.logger.error('Error on connecting to tado: #{err.message}')
