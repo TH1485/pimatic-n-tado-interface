@@ -2,7 +2,6 @@
   "name": "pimatic-n-tado-interface",
   "description": "pimatic interface Tado Thermostat api through node-tado",
   "author": "TH1485",
-  "contributers": "",
   "main": "n-tado-interface",
   "files": [
     "n-tado-interface.coffee",
@@ -19,7 +18,9 @@
   },
   "configSchema": "n-tado-interface-config-schema.coffee",
   "dependencies": {
-    "node-tado": "0.0.2"
+    "request": "2.83.1",
+    "moment": "2.19.4"
+   
   },
   "engines": {
     "node": ">0.8.x",
