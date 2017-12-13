@@ -17,19 +17,21 @@ module.exports = (env) ->
       
       client = new tadoClient()
       #connect to tado
-      client.login(@config.loginname, @config.password).then((resolve) => 
+      client.login(@config.loginname, @config.password).then((success) => 
         env.logger.debug "Login established, connected with tado webinterface"
-        return client.me().then((home_info) =>
+        client.me().then((home_info) =>
           try 
             jsonHome = JSON.parse(home_info)
             @home = jsonHome.homes[0]
             env.logger.debug('Acquired home: '  + JSON.stringify(@home))
           catch (e)
             throw e
+        )
       ).catch((err) =>
         env.logger.error('Error on connecting to tado: #{err.message}')
         env.logger.debug(err.stack)
       )
+      
 
      
       deviceConfigDef = require("./device-config-schema")
