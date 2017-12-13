@@ -7,7 +7,7 @@ module.exports = (env) ->
   assert = env.require 'cassert'
   #commons = require('pimatic-plugin-commons')(env)
   # Require node-tado (https://github.com/dVelopment/node-tado/)
-  tadoClient = require './client.js'
+  tadoClient = require './client.coffee'
   
   class TadoPlugin2 extends env.plugins.Plugin
 
