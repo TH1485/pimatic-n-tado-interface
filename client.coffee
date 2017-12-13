@@ -10,7 +10,7 @@ REFERER = 'https://my.tado.com/'
 
 modules.exports = ->
  
-	class client 
+  class client 
     login = (username, password) ->
       new Promise((resolve, reject) ->
         request.post {
