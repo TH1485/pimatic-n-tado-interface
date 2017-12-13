@@ -19,7 +19,7 @@ module.exports = (env) ->
       #connect to tado
       client.login(@config.loginname, @config.password).then((success) => 
         env.logger.debug "Login established, connected with tado webinterface"
-        client.me().then((home_info) =>
+        return client.me().then((home_info) =>
           try 
             jsonHome = JSON.parse(home_info)
             @home = jsonHome.homes[0]
