@@ -15,32 +15,31 @@ module.exports = (env) ->
       
       #@base = commons.base @, 'TadoPlugin'
       
-      client = new tadoClient()
-      #connect to tado
-      client.login(@config.loginname, @config.password)
-        .try((success) => 
-        env.logger.debug "Login established, connected with tado webinterface"
-        return client.me().then((home_info) =>
-          jsonHome = JSON.parse(home_info)
-          @home = jsonHome.homes[0]
-          env.logger.debug('Acquired home: '  + JSON.stringify(@home))
-          resolve(success)
+    client = new tadoClient()
+         #connect to tado
+    client.login(@config.loginname,@config.password)
+        .try((connected) =>
+      env.logger.debug "Login established, connected with tadowebinterface"
+      client.me().then((home_info) =>
+        jsonHome = JSON.parse(home_info)
+        @home = jsonHome.homes[0]
+        env.logger.debug('Acquired home: '  + JSON.stringify(@home))
+        resolve(connected)
         )
       ).catch((err) =>
-        env.logger.error('Error on connecting to tado: #{err.message}')
-        env.logger.debug(err.stack)
-      )
+       env.logger.error('Error on connecting to tado: #{err.message}')
+       env.logger.debug(err.stack)
+    )
       
+   
+    deviceConfigDef = require("./device-config-schema")
 
-     
-      deviceConfigDef = require("./device-config-schema")
-
-      @framework.deviceManager.registerDeviceClass("ZoneClimate", {
-        configDef: deviceConfigDef.ZoneClimate,
-        createCallback: (config, lastState) ->
-          device = new ZoneClimate(config, lastState)
-          return device
-      })
+    @framework.deviceManager.registerDeviceClass("ZoneClimate", {
+      configDef: deviceConfigDef.ZoneClimate,
+      createCallback: (config, lastState) ->
+        device = new ZoneClimate(config, lastState)
+        return device
+    })
  
   plugin = new TadoPlugin2
 
