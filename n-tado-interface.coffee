@@ -8,18 +8,26 @@ module.exports = (env) ->
   #commons = require('pimatic-plugin-commons')(env)
   # Require node-tado (https://github.com/dVelopment/node-tado/)
   tadoClient = require('node-tado').default
-  
+
   class TadoPlugin2 extends env.plugins.Plugin
 
     init: (app, @framework, @config) =>
       
-      #@base = commons.base @, 'TadoPlugin'
+    deviceConfigDef = require("./device-config-schema")
+
+    @framework.deviceManager.registerDeviceClass("ZoneClimate", {
+      configDef: deviceConfigDef.ZoneClimate,
+      createCallback: (config, lastState) ->
+        device = new ZoneClimate(config, lastState)
+        return device
+    })
+    
+    @loginname = @config.loginname
+    @password = @config.password
       
     client = new tadoClient
-         #connect to tado
-    logint="test"
-    pwdt = "test"
-    client.login(logint,pwdt).then((connected) =>
+    
+    client.login(@loginname, @password).then((connected) =>
       env.logger.debug "Login established, connected with tadowebinterface"
       client.me().then((home_info) =>
         jsonHome = JSON.parse(home_info)
@@ -31,16 +39,6 @@ module.exports = (env) ->
        env.logger.error('Error on connecting to tado: #{err.message}')
        env.logger.debug(err.stack)
     )
-      
-   
-    deviceConfigDef = require("./device-config-schema")
-
-    @framework.deviceManager.registerDeviceClass("ZoneClimate", {
-      configDef: deviceConfigDef.ZoneClimate,
-      createCallback: (config, lastState) ->
-        device = new ZoneClimate(config, lastState)
-        return device
-    })
  
   plugin = new TadoPlugin2
 
