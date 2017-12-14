@@ -8,18 +8,20 @@ const CLIENT_ID = 'tado-web-app';
 const CLIENT_SECRET = 'wZaRN7rpjn3FoNyF5IFuxg9uMzYJcvOoQ8QWiIqS3hfk6gLhVlG57j5YNoZL2Rtc';
 const REFERER = 'https://my.tado.com/';
 
-module.exports = function () {
-    
-    class Client {
-       
+class Client {
+      
        constructor (username,password) {
            this.username=username;
            this.password=password;
        }
-        
+       display() {
+           console.log(this.username);
+       }
        login() {
-            return new Promise(function (resolve, reject) {
-                request.post({
+            
+           return new Promise((resolve, reject) => {
+               console.log(this.password); 
+               request.post({
                     url: AUTH_URL + '/oauth/token',
                     qs: {
                         client_id: CLIENT_ID,
@@ -30,7 +32,7 @@ module.exports = function () {
                         scope: 'home.user'
                     },
                     json: true
-                }, function (err, response, result) {
+                }, (err, response, result) => {
                     if (err || response.statusCode !== 200) {
                         reject(err || result);
                     } else {
@@ -47,7 +49,7 @@ module.exports = function () {
         }
 
         refreshToken() {
-            return new Promise(function (resolve, reject) {
+            return new Promise((resolve, reject) => {
                 if (!this.token) {
                     return reject(new Error('not logged in'));
                 }
@@ -64,7 +66,7 @@ module.exports = function () {
                         refresh_token: this.token.refresh_token
                     },
                     json: true
-                }, function (err, response, result) {
+                }, (err, response, result) => {
                     if (err || response.statusCode !== 200) {
                         reject(err || result);
                     } else {
@@ -78,7 +80,7 @@ module.exports = function () {
         api(path) {
             return this.refreshToken()
                 .then(() => {
-                    return new Promise(function (resolve, reject) {
+                    return new Promise((resolve, reject) => {
                         request.get({
                             url: BASE_URL + '/api/v2' + path,
                             json: true,
@@ -88,7 +90,7 @@ module.exports = function () {
                             auth: {
                                 bearer: this.token.access_token
                             }
-                        }, function (err, response, result) {
+                        }, (err, response, result) => {
                             if (err || response.statusCode !== 200) {
                                 reject(err || result);
                             } else {
@@ -121,8 +123,11 @@ module.exports = function () {
 
 
     }
-return Client;
-}
+    
+module.exports.Client
+
+               
+               
 
                       
                   
