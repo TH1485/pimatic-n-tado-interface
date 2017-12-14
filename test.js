@@ -1,4 +1,3 @@
-json = require
 Tado = require('./client.js')
 var client = new Tado();
 var login='';
