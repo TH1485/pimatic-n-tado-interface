@@ -6,7 +6,7 @@
   "files": [
     "n-tado-interface.coffee",
     "README.md",
-    "client.coffee",
+    "client.js",
     "n-tado-interface-config-schema.coffee",
     "device-config-schema.coffee"
   ],
@@ -20,7 +20,6 @@
   "dependencies": {
     "request": "2.83.0",
     "moment": "2.19.4",
-    "node-tado": "0.0.2"
   },
   "engines": {
     "node": "4.6.2",
