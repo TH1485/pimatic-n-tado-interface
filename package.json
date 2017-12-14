@@ -19,7 +19,7 @@
   "configSchema": "n-tado-interface-config-schema.coffee",
   "dependencies": {
     "request": "2.83.0",
-    "moment": "2.19.4",
+    "moment": "2.19.4"
   },
   "engines": {
     "node": "4.6.2",
