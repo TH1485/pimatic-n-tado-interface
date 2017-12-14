@@ -5,7 +5,7 @@ module.exports = (env) ->
   
   # Require the [cassert library](https://github.com/rhoot/cassert).
   assert = env.require 'cassert'
-  tadoClient = require('node-tado').default
+  tadoClient = require('./client.js')
 
   class TadoPlugin2 extends env.plugins.Plugin
 
