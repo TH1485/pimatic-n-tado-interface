@@ -9,14 +9,15 @@ const CLIENT_SECRET = 'wZaRN7rpjn3FoNyF5IFuxg9uMzYJcvOoQ8QWiIqS3hfk6gLhVlG57j5YN
 const REFERER = 'https://my.tado.com/';
 
 module.exports = function () {
+    
     class Client {
-        
-       constructor(username,password) {
+       
+       constructor (username,password) {
            this.username=username;
            this.password=password;
        }
         
-       function login() {
+       login() {
             return new Promise(function (resolve, reject) {
                 request.post({
                     url: AUTH_URL + '/oauth/token',
@@ -40,12 +41,12 @@ module.exports = function () {
             });
         }
 
-        function saveToken(token) {
+        saveToken(token) {
             this.token = token;
             this.token.expires_in = moment().add(token.expires_in, 'seconds').toDate();
         }
 
-        function refreshToken() {
+        refreshToken() {
             return new Promise(function (resolve, reject) {
                 if (!this.token) {
                     return reject(new Error('not logged in'));
@@ -74,7 +75,7 @@ module.exports = function () {
             });
         }
 
-        function api(path) {
+        api(path) {
             return this.refreshToken()
                 .then(() => {
                     return new Promise(function (resolve, reject) {
@@ -98,23 +99,23 @@ module.exports = function () {
                 });
         }
 
-        function me() {
+        me() {
             return this.api('/me');
         }
 
-        function home(homeId) {
+        home(homeId) {
             return this.api('/homes/${homeId}');
         }
 
-        function zones(homeId) {
+        zones(homeId) {
             return this.api('/homes/${homeId}/zones');
         }
 
-        function weather(homeId) {
+        weather(homeId) {
             return this.api('/homes/${homeId}/weather');
         }
 
-        function state(homeId, zoneId) {
+        state(homeId, zoneId) {
             return this.api('/homes/${homeId}/zones/${zoneId}/state' );
         }
 
