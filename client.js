@@ -1,22 +1,25 @@
 'use strict';
-const request = require('request');
-const moment = require('moment');
 
-const BASE_URL = 'https://my.tado.com';
-const AUTH_URL = 'https://auth.tado.com';
-const CLIENT_ID = 'tado-web-app';
-const CLIENT_SECRET = 'wZaRN7rpjn3FoNyF5IFuxg9uMzYJcvOoQ8QWiIqS3hfk6gLhVlG57j5YNoZL2Rtc';
-const REFERER = 'https://my.tado.com/';
 
-class Client {
-      
-       constructor (username,password) {
-           this.username=username;
-           this.password=password;
-       }
-       display() {
-           console.log(this.username);
-       }
+module.exports= class Client {
+  
+  const request = require('request');
+  const moment = require('moment');
+
+  const BASE_URL = 'https://my.tado.com';
+  const AUTH_URL = 'https://auth.tado.com';
+  const CLIENT_ID = 'tado-web-app';
+  const CLIENT_SECRET = 'wZaRN7rpjn3FoNyF5IFuxg9uMzYJcvOoQ8QWiIqS3hfk6gLhVlG57j5YNoZL2Rtc';
+  const REFERER = 'https://my.tado.com/';
+
+  constructor (username,password) {
+    this.username=username;
+    this.password=password;
+    }
+  
+  display() {
+    console.log(this.username);
+    }
        login() {
             
            return new Promise((resolve, reject) => {
