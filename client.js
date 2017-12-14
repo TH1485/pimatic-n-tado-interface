@@ -10,8 +10,13 @@ const REFERER = 'https://my.tado.com/';
 
 module.exports = function () {
     class Client {
-       constructor() {}
-       function login(username, password) {
+        
+       constructor(username,password) {
+           this.username=username;
+           this.password=password;
+       }
+        
+       function login() {
             return new Promise(function (resolve, reject) {
                 request.post({
                     url: AUTH_URL + '/oauth/token',
@@ -19,8 +24,8 @@ module.exports = function () {
                         client_id: CLIENT_ID,
                         client_secret: CLIENT_SECRET,
                         grant_type: 'password',
-                        password: password,
-                        username: username,
+                        password: this.password,
+                        username: this.username,
                         scope: 'home.user'
                     },
                     json: true
