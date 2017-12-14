@@ -7,8 +7,7 @@ module.exports =  () ->
   CLIENT_ID = 'tado-web-app'
   CLIENT_SECRET = 'wZaRN7rpjn3FoNyF5IFuxg9uMzYJcvOoQ8QWiIqS3hfk6gLhVlG57j5YNoZL2Rtc'
   REFERER = 'https://my.tado.com/'
-    
- 
+
   class Client 
 
     login(username,password) ->
@@ -36,7 +35,6 @@ module.exports =  () ->
       this.token = token
       this.token.expires_in = moment().add(token.expires_in, 'seconds').toDate()
    
-
     refreshToken() ->
       return new Promise((resolve, reject) => 
         if (!this.token) 
@@ -59,7 +57,6 @@ module.exports =  () ->
         )
       )
 
-
     api(path) ->
       return this.refreshToken().then(() => 
         return new Promise((resolve, reject) => 
@@ -79,10 +76,9 @@ module.exports =  () ->
         )
       )
 
-
     me() ->
         return this.api('/me')
- 
+
     home(homeId) ->
         return this.api('/homes/${homeId}')
 
