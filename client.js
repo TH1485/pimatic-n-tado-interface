@@ -1,6 +1,6 @@
 'use strict';
-const request = require('request').default;
-const moment = require('moment').default;
+const request = require('request');
+const moment = require('moment');
 
 const BASE_URL = 'https://my.tado.com';
 const AUTH_URL = 'https://auth.tado.com';
