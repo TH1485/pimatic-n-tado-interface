@@ -3,7 +3,6 @@ module.exports =  function () {
 
     const request = require('request');
     const moment = require('moment');
-    const Promise = require ('bluebird');
     const BASE_URL = 'https://my.tado.com';
     const AUTH_URL = 'https://auth.tado.com';
     const CLIENT_ID = 'tado-web-app';
