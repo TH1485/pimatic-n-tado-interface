@@ -14,4 +14,6 @@ client.login(login, pwd).then((success) => {
 client.api('/me').then((result) => {
   console.log('me',result);
   console.log("homeid: " + result.homes[0].name);
+}).catch( (error) => {
+  console.log("Error:" + error);
 });
