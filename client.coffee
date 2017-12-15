@@ -10,6 +10,7 @@ class Client
   REFERER = 'https://my.tado.com/'
 
   constructor: () ->
+    this.token={}
 
   login:(username,password) ->
     return new Promise((resolve, reject) =>
