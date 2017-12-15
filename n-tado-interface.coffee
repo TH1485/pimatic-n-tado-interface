@@ -21,7 +21,7 @@ module.exports = (env) ->
           env.logger.info('Acquired home: ' + @_home.id ";" + @_home.name)
           resolve(home_info)
         )
-      ).catch((err) ->
+      ).catch((err) =>
         env.logger.error(@config.loginname,@config.password)
         env.logger.error('Error on connecting to tado:' + err)
         env.logger.debug(err)
@@ -77,11 +77,13 @@ module.exports = (env) ->
           @_humidity = climate.humidity
           @emit "temperature", @_temperature
           @emit "humidity", @_humidity
+          resolve(climate)
           )
         ).catch((err) =>
           env.logger.error("Error reading Tado-state of zone #{@zone}: #{err}")
           env.logger.error(JSON.stringify(err))
-          console.log(err)          
+          console.log(err)
+          reject(err)
         )
 
     getTemperature: -> Promise.resolve(@_temperature)
