@@ -19,13 +19,13 @@ module.exports = (env) ->
         @client.me().then((home_info) =>
           @_home = home_info.homes[0]
           env.logger.info('Acquired home: ' + @_home.id ";" + @_home.name)
-          resolve(home_info)
+          home_info
         )
       ).catch((err) =>
         env.logger.error(@config.loginname,@config.password)
         env.logger.error('Error on connecting to tado:' + err)
         env.logger.debug(err)
-        reject(err)
+        err
       )
        
       deviceConfigDef = require("./device-config-schema")
@@ -77,13 +77,13 @@ module.exports = (env) ->
           @_humidity = climate.humidity
           @emit "temperature", @_temperature
           @emit "humidity", @_humidity
-          resolve(climate)
+          climate
           )
         ).catch((err) =>
           env.logger.error("Error reading Tado-state of zone #{@zone}: #{err}")
           env.logger.error(JSON.stringify(err))
           console.log(err)
-          reject(err)
+          err
         )
 
     getTemperature: -> Promise.resolve(@_temperature)
