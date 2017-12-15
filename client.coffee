@@ -95,4 +95,4 @@ class Client
   state(homeId, zoneId) ->
     return this.api('/homes/${homeId}/zones/${zoneId}/state')
 
- module.exports = Client
+module.exports = Client
