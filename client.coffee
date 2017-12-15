@@ -52,7 +52,7 @@ class Client
           refresh_token: this.token.refresh_token
           scope: 'home.user'
         json: true
-      , (err, response, result) ->
+      , (err, response, result) =>
         if (err || response.statusCode != 200)
           reject(err || result)
         else
@@ -71,7 +71,7 @@ class Client
             referer: REFERER
           auth:
             bearer: this.token.access_token
-        , (err, response, result) ->
+        , (err, response, result) =>
           if (err || response.statusCode != 200)
             reject(err || result)
           else
