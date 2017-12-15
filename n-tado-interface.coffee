@@ -79,7 +79,7 @@ module.exports = (env) ->
           )
         ).catch((err) =>
           env.logger.error("Error reading Tado-state of zone #{@zone}: #{err}")
-          env.logger.error(err.error,err.description)
+          env.logger.error(err.toString())
         )
 
     getTemperature: -> Promise.resolve(@_temperature)
