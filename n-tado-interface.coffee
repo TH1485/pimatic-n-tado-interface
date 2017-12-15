@@ -70,15 +70,18 @@ module.exports = (env) ->
       super()
 
     requestValue: ->
-      settled(plugin._login).then( (success) =>
-        return plugin.client.state(plugin._home.id, @zone).then((climate) =>
-          env.logger.info("state received: " + climate)
-          @_temperature = climate.temperature
-          @_humidity = climate.humidity
-          @emit "temperature", @_temperature
-          @emit "humidity", @_humidity
-          climate
+      settled(plugin._login).then( (results) =>
+        if results.isFulfilled()
+          return plugin.client.state(plugin._home.id, @zone).then((climate) =>
+            env.logger.info("state received: " + climate)
+            @_temperature = climate.temperature
+            @_humidity = climate.humidity
+            @emit "temperature", @_temperature
+            @emit "humidity", @_humidity
+            climate
           )
+        else
+          return
         ).catch((err) =>
           env.logger.error("Error reading Tado-state of zone #{@zone}: #{err}")
           env.logger.error(JSON.stringify(err))
