@@ -9,9 +9,9 @@ REFERER = 'https://my.tado.com/'
 
 class Client
 
-  constructor () ->
+  constructor: () ->
 
-  login(username,password) ->
+  login:(username,password) ->
     return new Promise((resolve, reject) =>
       request.post(
         url: AUTH_URL + '/oauth/token'
@@ -32,12 +32,12 @@ class Client
         )
     )
 
-  saveToken(token) ->
+  saveToken:(token) ->
     this.token = token
     this.token.expires_in =
       moment().add(token.expires_in /2, 'seconds').toDate()
 
-  refreshToken() ->
+  refreshToken:() ->
     return new Promise((resolve, reject) =>
       if (!this.token)
         return reject(new Error('not logged in'))
@@ -61,7 +61,7 @@ class Client
       )
     )
 
-  api(path) ->
+  api:(path) ->
     return this.refreshToken().then(() =>
       return new Promise((resolve, reject) =>
         request.get(
@@ -80,19 +80,19 @@ class Client
       )
     )
 
-  me() ->
+  me:() ->
     return this.api('/me')
 
-  home(homeId) ->
+  home:(homeId) ->
     return this.api('/homes/${homeId}')
 
-  zones(homeId) ->
+  zones:(homeId) ->
     return this.api('/homes/${homeId}/zones')
 
-  weather(homeId) ->
+  weather:(homeId) ->
     return this.api('/homes/${homeId}/weather')
 
-  state(homeId, zoneId) ->
+  state:(homeId, zoneId) ->
     return this.api('/homes/${homeId}/zones/${zoneId}/state')
 
 module.exports = Client
