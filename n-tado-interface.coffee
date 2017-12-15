@@ -18,9 +18,9 @@ module.exports = (env) ->
       @password = @config.password?
        
       
-      @_login= client.login(@loginname, @password).then((connected) =>
+      @_login= @client.login(@loginname, @password).then((connected) =>
         env.logger.debug "Login established, connected with tadowebinterface"
-        return client.me().then((home_info) =>
+        return @client.me().then((home_info) =>
           @_home = home_info.homes[0]
           env.logger.debug('Acquired home: ' + @_home.id)
           resolve(true)
