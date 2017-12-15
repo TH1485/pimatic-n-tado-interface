@@ -66,7 +66,7 @@ module.exports = (env) ->
       super()
 
     requestValue: ->
-      if plugin._home.id
+      if plugin._home?.id
         plugin.client.state(plugin._home.id, @zone).then((climate) =>
           env.logger.info("state received: " + climate)
           @_temperature = climate.temperature
