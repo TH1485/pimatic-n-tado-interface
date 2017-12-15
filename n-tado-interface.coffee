@@ -12,16 +12,16 @@ module.exports = (env) ->
 
     init: (app, @framework, @config) =>
       
-      @client = new tadoClient
-      @_login= @client.login("thomas.hensing@gmail.com", "supermij11").then( (connected) =>
-        console.log("Login established, connected with tado web interface")
-        return @client.me().then( (home_info) =>
-          @_home = home_info.homes[0]
-          console.log("homeid: " + @_home.id)
+      client = new tadoClient
+      client.login("thomas.hensing@gmail.com", "supermij11").then( (connected) =>
+        env.logger.info("Login established, connected with tado web interface")
+        return client.me().then( (home_info) =>
+          home = home_info.homes[0]
+          env.logger.info("homeid: " + home.id)
           home_info
         )
       ).catch((err)->
-        console.log(err)
+        env.logger.info(err)
       )
 
       deviceConfigDef = require("./device-config-schema")
@@ -66,7 +66,7 @@ module.exports = (env) ->
       super()
 
     requestValue: ->
-      if plugin._home?.id
+      if plugin.home?.id
         plugin.client.state(plugin._home.id, @zone).then((climate) =>
           env.logger.info("state received: " + climate)
           @_temperature = climate.temperature
