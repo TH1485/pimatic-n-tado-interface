@@ -13,19 +13,18 @@ module.exports = (env) ->
     init: (app, @framework, @config) =>
       
       @client = new tadoClient
-
-      @_login= @client.login(@config.loginname, @config.password).then( (connected) =>
-        env.logger.info("Login established, connected with tado web interface")
+      @client= new Client
+      @_login= @client.login("thomas.hensing@gmail.com", "supermij11").then( (connected) =>
+        #console.log("Login established, connected with tado web interface")
         return @client.me().then( (home_info) =>
           @_home = home_info.homes[0]
-          env.logger.info("homeid: " + @_home.id)
+          #console.log("homeid: " + @_home.id)
           home_info
         )
-      ).catch((err) ->
-          env.logger.info(err)
+      ).catch((err)->
+        #console.log(err)
       )
-     
-       
+
       deviceConfigDef = require("./device-config-schema")
 
       @framework.deviceManager.registerDeviceClass("ZoneClimate", {
