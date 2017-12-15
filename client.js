@@ -1,123 +1,135 @@
-'use strict'
-module.exports =  function () {
+"use strict";
+var Client;
 
-    const request = require('request');
-    const moment = require('moment');
-    const BASE_URL = 'https://my.tado.com';
-    const AUTH_URL = 'https://auth.tado.com';
-    const CLIENT_ID = 'tado-web-app';
-    const CLIENT_SECRET = 'wZaRN7rpjn3FoNyF5IFuxg9uMzYJcvOoQ8QWiIqS3hfk6gLhVlG57j5YNoZL2Rtc';
-    const REFERER = 'https://my.tado.com/';
-    
- 
-    class Client {
+Client = (function() {
+  var AUTH_URL, BASE_URL, CLIENT_ID, CLIENT_SECRET, REFERER, moment, request;
 
-        login(username,password) {
-          return new Promise((resolve, reject) => {
-              request.post({
-                  url: AUTH_URL + '/oauth/token',
-                  qs: {
-                      client_id: CLIENT_ID,
-                      client_secret: CLIENT_SECRET,
-                      grant_type: 'password',
-                      password: password,
-                      username: username,
-                      scope: 'home.user'
-                    },
-                    json: true
-              }, (err, response, result) => {
-                if (err || response.statusCode !== 200) {
-                  reject(err || result);
-                } else {
-                  this.saveToken(result);
-                  resolve(true);
-                }
-            });
+  request = require('request');
+
+  moment = require('moment');
+
+  BASE_URL = 'https://my.tado.com';
+
+  AUTH_URL = 'https://auth.tado.com';
+
+  CLIENT_ID = 'tado-web-app';
+
+  CLIENT_SECRET = 'wZaRN7rpjn3FoNyF5IFuxg9uMzYJcvOoQ8QWiIqS3hfk6gLhVlG57j5YNoZL2Rtc';
+
+  REFERER = 'https://my.tado.com/';
+
+  function Client() {}
+
+  Client.prototype.login = function(username, password) {
+    return new Promise((function(_this) {
+      return function(resolve, reject) {
+        return request.post({
+          url: AUTH_URL + '/oauth/token',
+          qs: {
+            client_id: CLIENT_ID,
+            client_secret: CLIENT_SECRET,
+            grant_type: 'password',
+            password: password,
+            username: username,
+            scope: 'home.user'
+          },
+          json: true
+        }, function(err, response, result) {
+          if (err || response.statusCode !== 200) {
+            return reject(err || result);
+          } else {
+            _this.saveToken(result);
+            return resolve(true);
+          }
+        });
+      };
+    })(this));
+  };
+
+  Client.prototype.saveToken = function(token) {
+    this.token = token;
+    return this.token.expires_in = moment().add(token.expires_in / 2, 'seconds').toDate();
+  };
+
+  Client.prototype.refreshToken = function() {
+    return new Promise((function(_this) {
+      return function(resolve, reject) {
+        if (!_this.token) {
+          return reject(new Error('not logged in'));
+        }
+        if (moment().subtract(5, 'seconds').isBefore(_this.token.expires_in)) {
+          return resolve();
+        }
+        return request.post({
+          url: AUTH_URL + '/oauth/token',
+          qs: {
+            client_id: CLIENT_ID,
+            client_secret: CLIENT_SECRET,
+            grant_type: 'refresh_token',
+            refresh_token: _this.token.refresh_token,
+            scope: 'home.user'
+          },
+          json: true
+        }, function(err, response, result) {
+          if (err || response.statusCode !== 200) {
+            return reject(err || result);
+          } else {
+            _this.saveToken(result);
+            return resolve(true);
+          }
+        });
+      };
+    })(this));
+  };
+
+  Client.prototype.api = function(path) {
+    return this.refreshToken().then((function(_this) {
+      return function() {
+        return new Promise(function(resolve, reject) {
+          return request.get({
+            url: BASE_URL + '/api/v2' + path,
+            json: true,
+            headers: {
+              referer: REFERER
+            },
+            auth: {
+              bearer: _this.token.access_token
+            }
+          }, function(err, response, result) {
+            if (err || response.statusCode !== 200) {
+              return reject(err || result);
+            } else {
+              return resolve(result);
+            }
           });
-      }
+        });
+      };
+    })(this));
+  };
 
-      saveToken(token) {
-          this.token = token;
-          this.token.expires_in = moment().add(token.expires_in / 2, 'seconds').toDate();
-      }
+  Client.prototype.me = function() {
+    return this.api('/me');
+  };
 
-      refreshToken() {
-          return new Promise((resolve, reject) => {
-              if (!this.token) {
-                  return reject(new Error('not logged in'));
-              }
+  Client.prototype.home = function(homeId) {
+    return this.api('/homes/${homeId}');
+  };
 
-              if (moment().subtract(5, 'seconds').isBefore(this.token.expires_in)) {
-                  return resolve();
-              }
+  Client.prototype.zones = function(homeId) {
+    return this.api('/homes/${homeId}/zones');
+  };
 
-              request.post({
-                  url: AUTH_URL + '/oauth/token',
-                  qs: {
-                      client_id: CLIENT_ID,
-                      client_secret: CLIENT_SECRET,
-                      grant_type: 'refresh_token',
-                      refresh_token: this.token.refresh_token,
-                      scope: 'home.user'
-                  },
-                  json: true
-              }, (err, response, result) => {
-                  if (err || response.statusCode !== 200) {
-                      reject(err || result);
-                  } else {
-                      this.saveToken(result);
-                      resolve(true);
-                  }
-              });
-          });
-      }
+  Client.prototype.weather = function(homeId) {
+    return this.api('/homes/${homeId}/weather');
+  };
 
-      api(path) {
-          return this.refreshToken()
-              .then(() => {
-                  return new Promise((resolve, reject) => {
-                      request.get({
-                          url: BASE_URL + '/api/v2' + path,
-                          json: true,
-                          headers: {
-                              referer: REFERER
-                          },
-                          auth: {
-                              bearer: this.token.access_token
-                          }
-                      }, (err, response, result) => {
-                          if (err || response.statusCode !== 200) {
-                              reject(err || result);
-                          } else {
-                              resolve(result);
-                          }
-                      });
-                  });
-              });
-      }
+  Client.prototype.state = function(homeId, zoneId) {
+    return this.api('/homes/${homeId}/zones/${zoneId}/state');
+  };
 
-      me() {
-          return this.api('/me');
-      }
+  return Client;
 
-      home(homeId) {
-          return this.api('/homes/${homeId}');
-      }
+})();
 
-      zones(homeId) {
-          return this.api('/homes/${homeId}/zones');
-      }
+module.exports = Client;
 
-      weather(homeId) {
-          return this.api('/homes/${homeId}/weather');
-      }
-
-      state(homeId, zoneId) {
-          return this.api('/homes/${homeId}/zones/${zoneId}/state' );
-      }
-
-
-    }
-   
-    return new Client();
-}
