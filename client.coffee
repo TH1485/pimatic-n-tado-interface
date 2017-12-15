@@ -5,9 +5,12 @@ class Client
   BASE_URL = 'https://my.tado.com'
   AUTH_URL = 'https://auth.tado.com'
   CLIENT_ID = 'tado-web-app'
-  CLIENT_SECRET = 'wZaRN7rpjn3FoNyF5IFuxg9uMzYJcvOoQ8QWiIqS3hfk6gLhVlG57j5YNoZL2Rtc'
+  CLIENT_SECRET =
+    'wZaRN7rpjn3FoNyF5IFuxg9uMzYJcvOoQ8QWiIqS3hfk6gLhVlG57j5YNoZL2Rtc'
   REFERER = 'https://my.tado.com/'
-  
+
+  constructor: () ->
+
   login:(username,password) ->
     return new Promise((resolve, reject) =>
       request.post(
