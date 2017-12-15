@@ -13,8 +13,7 @@ module.exports = (env) ->
     init: (app, @framework, @config) =>
       
       @client = new tadoClient
-  
-  
+
       @_login= @client.login(@config.loginname, @config.password).then( (connected) =>
         env.logger.info("Login established, connected with tado web interface")
         return @client.me().then((home_info) =>
@@ -23,8 +22,7 @@ module.exports = (env) ->
           home_info
         )
       ).catch((err) =>
-        env.logger.info('Error on connecting to tado:' + err)
-        env.logger.info(err)
+        env.logger.info('Error on connecting to tado: ' + err.toString())
         err
       )
        
