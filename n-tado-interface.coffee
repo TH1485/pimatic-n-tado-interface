@@ -66,18 +66,17 @@ module.exports = (env) ->
       super()
 
     requestValue: ->
-      settled(plugin._login).then( (results) =>
-        return plugin.client.state(plugin._home.id, @zone).then((climate) =>
+      if plugin._home.id
+        plugin.client.state(plugin._home.id, @zone).then((climate) =>
           env.logger.info("state received: " + climate)
           @_temperature = climate.temperature
           @_humidity = climate.humidity
           @emit "temperature", @_temperature
           @emit "humidity", @_humidity
           climate
+        ).catch((err) =>
+          env.logger.error(err)
         )
-      ).catch((err) =>
-        env.logger.error(err)
-      )
 
     getTemperature: -> Promise.resolve(@_temperature)
     getHumidity: -> Promise.resolve(@_humidity)
