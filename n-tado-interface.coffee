@@ -73,7 +73,7 @@ module.exports = (env) ->
 
     requestValue: ->
       plugin._login.then( (success) =>
-        return plugin.client.state(plugin.home.id, @zone).then((climate) =>
+        return plugin.client.state(plugin._home.id, @zone).then((climate) =>
           @_temperature = climate.temperature
           @_humidity = climate.humidity
           @emit "temperature", @_temperature
