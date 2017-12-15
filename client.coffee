@@ -33,7 +33,7 @@ module.exports =  () ->
 
     saveToken(token) ->
       this.token = token
-      this.token.expires_in = moment().add(token.expires_in, 'seconds').toDate()
+      this.token.expires_in = moment().add(token.expires_in /2, 'seconds').toDate()
    
     refreshToken() ->
       return new Promise((resolve, reject) => 
@@ -41,12 +41,14 @@ module.exports =  () ->
             return reject(new Error('not logged in'))
         if (moment().subtract(5, 'seconds').isBefore(this.token.expires_in)) 
             return resolve()
-        request.get(
+        request.post(
           url: AUTH_URL + '/oauth/token'
           qs: 
-              client_id: CLIENT_ID,
+              client_id: CLIENT_ID
+              client_secret: CLIENT_SECRET
               grant_type: 'refresh_token'
               refresh_token: this.token.refresh_token
+              scope: 'home.user'
           json: true
         , (err, response, result) =>
           if (err || response.statusCode != 200) 
