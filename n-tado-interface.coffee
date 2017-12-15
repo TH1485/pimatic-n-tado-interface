@@ -15,11 +15,6 @@ module.exports = (env) ->
       client = new tadoClient
       client.login("thomas.hensing@gmail.com", "supermij11").then( (connected) =>
         env.logger.info("Login established, connected with tado web interface")
-        return client.me().then( (home_info) =>
-          home = home_info.homes[0]
-          env.logger.info("homeid: " + home.id)
-          home_info
-        )
       ).catch((err)->
         env.logger.info(err)
       )
