@@ -12,11 +12,19 @@ module.exports = (env) ->
 
     init: (app, @framework, @config) =>
       
-      client = new tadoClient
-      client.login("thomas.hensing@gmail.com", "supermij11").then( (connected) =>
+      @client= new tadoClient
+      
+      @_login= @client.login(@config.loginname, @config.password).then((connected) =>
         env.logger.info("Login established, connected with tado web interface")
-      ).catch((err)->
-        env.logger.info(err)
+        return @client.me().then((home_info) =>
+          @_home = home_info.homes[0]
+          env.logger.info('Acquired home: ' + @_home.id ";" + @_home.name)
+          resolve(true)
+        )
+      ).catch((err) ->
+        env.logger.error(@config.loginname,@config.password)
+        env.logger.error('Error on connecting to tado:' + err)
+        env.logger.debug(err)
       )
 
       deviceConfigDef = require("./device-config-schema")
