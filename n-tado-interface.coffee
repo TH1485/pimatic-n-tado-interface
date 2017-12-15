@@ -13,7 +13,6 @@ module.exports = (env) ->
     init: (app, @framework, @config) =>
       
       @client = new tadoClient
-      @client= new Client
       @_login= @client.login("thomas.hensing@gmail.com", "supermij11").then( (connected) =>
         #console.log("Login established, connected with tado web interface")
         return @client.me().then( (home_info) =>
