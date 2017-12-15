@@ -6,7 +6,8 @@ module.exports = (env) ->
   # Require the [cassert library](https://github.com/rhoot/cassert).
   assert = env.require 'cassert'
   tadoClient = require "./client.coffee"
-
+  settled = (promise) -> Promise.settle([promise])
+  
   class TadoPlugin2 extends env.plugins.Plugin
 
     init: (app, @framework, @config) =>
@@ -68,8 +69,9 @@ module.exports = (env) ->
       super()
 
     requestValue: ->
-      plugin._login.then( (success) =>
+      settled(plugin._login).then( (success) =>
         return plugin.client.state(plugin._home.id, @zone).then((climate) =>
+          env.logger.info("state received: " + climate)
           @_temperature = climate.temperature
           @_humidity = climate.humidity
           @emit "temperature", @_temperature
