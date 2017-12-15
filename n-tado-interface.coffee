@@ -11,7 +11,7 @@ module.exports = (env) ->
 
     init: (app, @framework, @config) =>
       
-      client = new tadoClient
+      @client = new tadoClient
       
       
       @loginname = @config.loginname?
