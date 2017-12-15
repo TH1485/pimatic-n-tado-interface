@@ -16,15 +16,15 @@ module.exports = (env) ->
 
       @_login= @client.login(@config.loginname, @config.password).then( (connected) =>
         env.logger.info("Login established, connected with tado web interface")
-        return @client.me().then((home_info) =>
+        return @client.me().then( (home_info) =>
           @_home = home_info.homes[0]
-          env.logger.info("homeid: " + home_info.homes[0].id)
+          env.logger.info("homeid: " + @_home.id)
           home_info
         )
-      ).catch((err) =>
-        env.logger.info('Error on connecting to tado: ' + err.toString())
-        err
+      ).catch((err) ->
+          env.logger.info(err)
       )
+     
        
       deviceConfigDef = require("./device-config-schema")
 
