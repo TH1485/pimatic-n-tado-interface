@@ -6,25 +6,19 @@ module.exports = (env) ->
   # Require the [cassert library](https://github.com/rhoot/cassert).
   assert = env.require 'cassert'
   tadoClient = require "./client.coffee"
-  settled = (promise) -> Promise.settle([promise])
+
   
   class TadoPlugin2 extends env.plugins.Plugin
 
     init: (app, @framework, @config) =>
       
-      @client= new tadoClient
-      
-      @_login= @client.login(@config.loginname, @config.password).then((connected) =>
+      client = new tadoClient
+      loginname=@config.loginname
+      password =@config.password
+      client.login(loginname, password).then( (connected) =>
         env.logger.info("Login established, connected with tado web interface")
-        return @client.me().then((home_info) =>
-          @_home = home_info.homes[0]
-          env.logger.info('Acquired home: ' + @_home.id ";" + @_home.name)
-          resolve(true)
-        )
-      ).catch((err) ->
-        env.logger.error(@config.loginname,@config.password)
-        env.logger.error('Error on connecting to tado:' + err)
-        env.logger.debug(err)
+      ).catch((err)->
+        env.logger.info(err)
       )
 
       deviceConfigDef = require("./device-config-schema")
