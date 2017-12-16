@@ -19,10 +19,11 @@ module.exports = (env) ->
       @framework.on 'after init', =>
         @client.login(loginname, password).then( (connected) =>
           env.logger.info("Login established, connected with tado web interface")
-          return @client.me().then(home_info)
+          return @client.me().then( (home_info)
             @home= home_info.homes[0]
             env.logger.info("acquired home_id: "+ @home.id)
             Promise.resolve @home
+            )
           ).catch((err)->
             env.logger.info(err)
             Promise.reject err
