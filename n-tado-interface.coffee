@@ -57,11 +57,10 @@ module.exports = (env) ->
     constructor: (@config, lastState) ->
       @name = @config.name
       @id = @config.id
-      super()
       @zone = @config.zone
       @_temperature = lastState?.temperature?.value
       @_humidity = lastState?.humidity?.value
-      
+      super()
 
       @requestValue()
       @requestValueIntervalId =
