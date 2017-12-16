@@ -12,15 +12,21 @@ module.exports = (env) ->
 
     init: (app, @framework, @config) =>
       
-      client = new tadoClient
+      @client = new tadoClient
       loginname=@config.loginname
       password =@config.password
-      env.logger.info(loginname,password)
-      client.login(loginname, password).then( (connected) =>
-        env.logger.info("Login established, connected with tado web interface")
-      ).catch((err)->
-        env.logger.info(err)
-      )
+      
+      @framework.on 'after init', =>
+        @client.login(loginname, password).then( (connected) =>
+          env.logger.info("Login established, connected with tado web interface")
+          return @client.me().then(home_info)
+            @home= home_info.homes[0]
+            env.logger.info("acquired home_id: "+ @home.id)
+            Promise.resolve @home
+        ).catch((err)->
+          env.logger.info(err)
+          Promise.reject err
+        )
 
       deviceConfigDef = require("./device-config-schema")
 
@@ -48,12 +54,13 @@ module.exports = (env) ->
         unit: '%'
 
     constructor: (@config, lastState) ->
+      super(@config, lastState)
       @name = @config.name
       @id = @config.id
       @zone = @config.zone
       @_temperature = lastState?.temperature?.value
       @_humidity = lastState?.humidity?.value
-      super()
+      
 
       @requestValue()
       @requestValueIntervalId =
@@ -65,7 +72,7 @@ module.exports = (env) ->
 
     requestValue: ->
       if plugin.home?.id
-        plugin.client.state(plugin._home.id, @zone).then((climate) =>
+        plugin.client.state(plugin.home.id, @zone).then((climate) =>
           env.logger.info("state received: " + climate)
           @_temperature = climate.temperature
           @_humidity = climate.humidity
@@ -75,6 +82,8 @@ module.exports = (env) ->
         ).catch((err) =>
           env.logger.error(err)
         )
+      else 
+        env.logger.info("no tado home id")
 
     getTemperature: -> Promise.resolve(@_temperature)
     getHumidity: -> Promise.resolve(@_humidity)
