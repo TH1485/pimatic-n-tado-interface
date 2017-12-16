@@ -10,7 +10,7 @@
     "n-tado-interface-config-schema.coffee",
     "device-config-schema.coffee"
   ],
-  "version": "0.0.2",
+  "version": "0.0.3",
   "homepage": "http://github.com/TH1485/pimatic-n-tado-interface",
   "repository": {
     "type": "git",
