@@ -55,9 +55,9 @@ module.exports = (env) ->
         unit: '%'
 
     constructor: (@config, lastState) ->
-      super(@config, lastState)
       @name = @config.name
       @id = @config.id
+      super()
       @zone = @config.zone
       @_temperature = lastState?.temperature?.value
       @_humidity = lastState?.humidity?.value
