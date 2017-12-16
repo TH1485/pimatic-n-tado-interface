@@ -6,7 +6,7 @@
   "files": [
     "n-tado-interface.coffee",
     "README.md",
-    "client.js",
+    "client.coffee",
     "n-tado-interface-config-schema.coffee",
     "device-config-schema.coffee"
   ],
