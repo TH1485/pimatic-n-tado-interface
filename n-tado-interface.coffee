@@ -16,10 +16,11 @@ module.exports = (env) ->
       loginname=@config.loginname
       password =@config.password
       @framework.on 'after init', =>
-        @home = @client.login(loginname, password).then( (connected) =>
+        @client.login(loginname, password).then( (connected) =>
           env.logger.info("Login established, connected with tado web interface")
           return @client.me().then( (home_info) =>
             env.logger.info("acquired home_id: "+ home_info.homes[0].id)
+            @_setHome(home_info.homes[0])
             Promise.resolve home_info.homes[0]
             )
           ).catch((err)->
@@ -35,6 +36,10 @@ module.exports = (env) ->
           device = new ZoneClimate(config, lastState)
           return device
       })
+    
+    _setHome: (home) ->
+      if home?
+        @home = home
 
   plugin = new TadoPlugin2
 
