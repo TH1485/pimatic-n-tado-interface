@@ -15,6 +15,7 @@ module.exports = (env) ->
       client = new tadoClient
       loginname=@config.loginname
       password =@config.password
+      env.logger.info(loginname,password)
       client.login(loginname, password).then( (connected) =>
         env.logger.info("Login established, connected with tado web interface")
       ).catch((err)->
