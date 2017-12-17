@@ -78,7 +78,7 @@ module.exports = (env) ->
         plugin.client.state(plugin.home.id, @zone).then((climate) =>
           env.logger.info("state received: " + climate)
           @_temperature = climate.sensorDataPoints.insideTemperature.celsius
-          @_humidity = climate.sensorDataPoints.sensorDataPoints.humidity.percentage
+          @_humidity = climate.sensorDataPoints.humidity.percentage
           @emit "temperature", @_temperature
           @emit "humidity", @_humidity
           climate
