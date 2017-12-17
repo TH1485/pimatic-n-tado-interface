@@ -83,15 +83,15 @@ class Client
     return this.api('/me')
 
   home:(homeId) ->
-    return this.api("/homes/${homeId}")
+    return this.api("/homes/#{homeId}")
 
   zones:(homeId) ->
-    return this.api("/homes/${homeId}/zones")
+    return this.api("/homes/#{homeId}/zones")
 
   weather:(homeId) ->
-    return this.api("/homes/${homeId}/weather")
+    return this.api("/homes/#{homeId}/weather")
 
   state:(homeId, zoneId) ->
-    return this.api("/homes/${homeId}/zones/${zoneId}/state")
+    return this.api("/homes/#{homeId}/zones/#{zoneId}/state")
 
 module.exports = Client
