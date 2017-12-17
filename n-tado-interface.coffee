@@ -75,7 +75,7 @@ module.exports = (env) ->
 
     requestValue: ->
       if plugin.home?.id
-        plugin.client.state(Number(plugin.home.id), @zone).then((climate) =>
+        plugin.client.state(plugin.home.id, @zone).then((climate) =>
           env.logger.info("state received: " + climate)
           @_temperature = climate.temperature
           @_humidity = climate.humidity
