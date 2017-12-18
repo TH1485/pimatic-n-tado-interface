@@ -16,7 +16,7 @@ module.exports = (env) ->
       loginname= @config.loginname
       password = @config.password
      
-      @framework 'after init', =>
+      @framework.on 'after init', =>
         @loginPromise =
           retry(() => @client.login(loginname, password),
           {
