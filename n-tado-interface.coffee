@@ -49,15 +49,16 @@ module.exports = (env) ->
             for zone in zones
               if zone.type = "HEATING"
                 id = @base.generateDeviceId @framework, zone.name, id
-                config =
+                config = {
                   class: ZoneClimate
                   id: id
                   zone: zone.id
                   name: zone.name
                   interval: 120000
-                @framework.deviceManager.discoveredDevice(
+                }
+              @framework.deviceManager.discoveredDevice(
                 'pimatic-n-tado', config.name, config
-                )
+              )
             Promise.resolve(zones)
           )
         ).catch ( (err) =>
