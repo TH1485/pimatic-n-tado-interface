@@ -6,7 +6,6 @@ module.exports = (env) ->
   assert = env.require 'cassert'
   tadoClient = require "./client.coffee"
   retry = require 'bluebird-retry'
-  moment = require 'moment' 
   
   class TadoPlugin2 extends env.plugins.Plugin
 
