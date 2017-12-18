@@ -26,7 +26,7 @@ module.exports = (env) ->
         ).then((connected) =>
           env.logger.info("Login established, connected with tado web interface")
           return @client.me().then( (home_info) =>
-            env.logger.info("acquired home: "+ home_info.homes[0].name)
+            env.logger.info("acquired home: #{home_info.homes[0].name}")
             if @config.debug
               env.logger.debug(JSON.stringify(home_info))
             @setHome(home_info.homes[0])
@@ -87,14 +87,14 @@ module.exports = (env) ->
       plugin.loginPromise
       .then( (success) =>
         return plugin.client.state(plugin.home.id, @zone)
-        .then( (climate) =>
+        .then( (state) =>
           if @config.debug
-            env.logger.debug("state received: " + JSON.stringify(climate))
-          @_temperature = climate.sensorDataPoints.insideTemperature.celsius
-          @_humidity = climate.sensorDataPoints.humidity.percentage
+            env.logger.debug("state received: #{JSON.stringify(state)}")
+          @_temperature = state.sensorDataPoints.insideTemperature.celsius
+          @_humidity = state.sensorDataPoints.humidity.percentage
           @emit "temperature", @_temperature
           @emit "humidity", @_humidity
-          Promise.resolve(climate)
+          Promise.resolve(state)
         )        
       ).catch( (err) =>
         env.logger.error(err)
