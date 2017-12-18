@@ -6,7 +6,7 @@ module.exports = (env) ->
   assert = env.require 'cassert'
   tadoClient = require "./client.coffee"
   retry = require 'bluebird-retry'
-  commons = require('pimatic-plugin-commons')(env)
+  commons = env.require "pimatic-plugin-commons"
   
   class TadoPlugin2 extends env.plugins.Plugin
 
