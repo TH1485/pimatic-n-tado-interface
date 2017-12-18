@@ -11,5 +11,9 @@ module.exports = {
       description:"Tado webpassword"
       type: "string"
       required: true
+    debug:
+      description: "Log information for debugging, including received messages"
+      type: "boolean"
+      default: true
   } 
 }
