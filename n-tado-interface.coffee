@@ -6,7 +6,7 @@ module.exports = (env) ->
   assert = env.require 'cassert'
   tadoClient = require './client.coffee'
   retry = require 'bluebird-retry'
-  commons = env.require 'pimatic-plugin-commons'
+  commons = require('pimatic-plugin-commons')(env) 
   
   class TadoPlugin2 extends env.plugins.Plugin
 
@@ -77,8 +77,6 @@ module.exports = (env) ->
       if home?
         @home = home
        
-    
-
   plugin = new TadoPlugin2
 
   class ZoneClimate extends env.devices.TemperatureSensor
