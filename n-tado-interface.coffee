@@ -29,16 +29,16 @@ module.exports = (env) ->
         #  )
       @loginPromise = retry(@client.login(loginname, password), {max_tries: 10, interval: 1000, backoff: 2})
         .then((connected) =>
-        env.logger.info("Login established, connected with tado web interface")
-        return @client.me().then( (home_info) =>
-          env.logger.info("acquired home_id: "+ home_info.homes[0].id)
-          @_setHome(home_info.homes[0])
-          Promise.resolve home_info.homes[0]
+          env.logger.info("Login established, connected with tado web interface")
+          return @client.me().then( (home_info) =>
+            env.logger.info("acquired home_id: "+ home_info.homes[0].id)
+            @_setHome(home_info.homes[0])
+            Promise.resolve home_info.homes[0]
+          )
+        ).catch((err) ->
+          env.logger.info(err)
+          Promise.reject err
         )
-      ).catch((err) ->
-        env.logger.info(err)
-        Promise.reject err
-      )
         
         
       deviceConfigDef = require("./device-config-schema")
