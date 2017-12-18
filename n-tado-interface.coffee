@@ -27,24 +27,25 @@ module.exports = (env) ->
          #   env.logger.info(err)
          #   Promise.reject err
         #  )
-      @loginPromise = 
-      retry(() => @client.login(loginname, password), 
-      {
-        max_tries: 10
-        interval: 1000
-        backoff: 2
-       }
-      ).then((connected) =>
-        env.logger.info("Login established, connected with tado web interface")
-        return @client.me().then( (home_info) =>
-          env.logger.info("acquired home_id: "+ home_info.homes[0].id)
-          @_setHome(home_info.homes[0])
-          Promise.resolve home_info.homes[0]
+      @loginPromise =
+        retry(() => @client.login(loginname, password),
+        {
+          max_tries: 10
+          interval: 100
+          backoff: 2
+        }
+        ).then((connected) =>
+          env.logger.debug("Login established, connected with tado web interface")
+          return @client.me().then( (home_info) =>
+            env.logger.debug("acquired home: "+ JSON.stringify(home_info))
+            @setHome(home_info.homes[0])
+            resolve(home_info)
+          )
+        ).catch((err) ->
+          env.logger.debug("Could not connect to tado web interface")
+          env.logger.err(err)
+          reject(err)
         )
-      ).catch((err) ->
-        env.logger.info(err)
-        Promise.reject err
-      ) 
 
       deviceConfigDef = require("./device-config-schema")
 
@@ -55,7 +56,7 @@ module.exports = (env) ->
           return device
       })
     
-    _setHome: (home) ->
+    setHome: (home) ->
       if home?
         @home = home
 
@@ -92,21 +93,24 @@ module.exports = (env) ->
       super()
 
     requestValue: ->
-      if plugin.home?.id
-        plugin.client.state(plugin.home.id, @zone).then((climate) =>
-          env.logger.info("state received: " + JSON.stringify(climate))
+      #if plugin.home?.id
+      plugin.loginPromise
+      .then( (success) =>
+        return plugin.client.state(plugin.home.id, @zone)
+        .then( (climate) =>
+          env.logger.debug("state received: " + JSON.stringify(climate))
           @_temperature = climate.sensorDataPoints.insideTemperature.celsius
           @_humidity = climate.sensorDataPoints.humidity.percentage
           @emit "temperature", @_temperature
           @emit "humidity", @_humidity
-          climate
-        ).catch((err) =>
-          env.logger.error(err)
-          env.logger.info(plugin.home.id)
-          reject(err)
-        )
-      else 
-        env.logger.info("no tado home id")
+          resolve(climate)
+        )        
+      ).catch( (err) =>
+        env.logger.error(err)
+        env.logger.debug("homeId=:" +plugin.home.id)
+        reject(err)
+      )
+     
 
     getTemperature: -> Promise.resolve(@_temperature)
     getHumidity: -> Promise.resolve(@_humidity)
