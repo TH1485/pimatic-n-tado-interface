@@ -15,18 +15,7 @@ module.exports = (env) ->
       @client = new tadoClient
       loginname= @config.loginname
       password = @config.password
-      #@framework.on 'after init', =>
-      #@client.login(loginname, password).then( (connected) =>
-         # env.logger.info("Login established, connected with tado web interface")
-         # return @client.me().then( (home_info) =>
-         #   env.logger.info("acquired home_id: "+ home_info.homes[0].id)
-         #   @_setHome(home_info.homes[0])
-         #   Promise.resolve home_info.homes[0]
-         #   )
-         # ).catch((err)->
-         #   env.logger.info(err)
-         #   Promise.reject err
-        #  )
+     
       @loginPromise =
         retry(() => @client.login(loginname, password),
         {
@@ -35,15 +24,16 @@ module.exports = (env) ->
           backoff: 2
         }
         ).then((connected) =>
-          env.logger.debug("Login established, connected with tado web interface")
+          env.logger.info("Login established, connected with tado web interface")
           return @client.me().then( (home_info) =>
-            env.logger.debug("acquired home: "+ JSON.stringify(home_info))
+            env.logger.info("acquired home: "+ home_info.homes[0].name)
+            if @config.debug
+              env.logger.debug(JSON.stringify(home_info))
             @setHome(home_info.homes[0])
             Promise.resolve(home_info)
           )
         ).catch((err) ->
-          env.logger.debug("Could not connect to tado web interface")
-          env.logger.error(err)
+          env.logger.error("Could not connect to tado web interface", err)
           Promise.reject(err)
         )
 
@@ -98,7 +88,8 @@ module.exports = (env) ->
       .then( (success) =>
         return plugin.client.state(plugin.home.id, @zone)
         .then( (climate) =>
-          env.logger.debug("state received: " + JSON.stringify(climate))
+          if @config.debug
+            env.logger.debug("state received: " + JSON.stringify(climate))
           @_temperature = climate.sensorDataPoints.insideTemperature.celsius
           @_humidity = climate.sensorDataPoints.humidity.percentage
           @emit "temperature", @_temperature
@@ -107,7 +98,8 @@ module.exports = (env) ->
         )        
       ).catch( (err) =>
         env.logger.error(err)
-        env.logger.debug("homeId=:" +plugin.home.id)
+        if @config.debug
+          env.logger.debug("homeId=:" +plugin.home.id)
         Promise.reject(err)
       )
      
