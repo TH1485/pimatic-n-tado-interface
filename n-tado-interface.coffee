@@ -12,6 +12,7 @@ module.exports = (env) ->
 
     init: (app, @framework, @config) =>
       
+      @base= commons.base
       @client = new tadoClient
       loginname= @config.loginname
       password = @config.password
@@ -54,7 +55,7 @@ module.exports = (env) ->
             id = null
             for zone in zones
               if zone.type = "HEATING"
-                id = @commons.base.generateDeviceId @framework, zone.name, id
+                id = @base.generateDeviceId @framework, zone.name, id
                 config = {
                   class: ZoneClimate
                   id: id
