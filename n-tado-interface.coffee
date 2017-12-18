@@ -28,7 +28,7 @@ module.exports = (env) ->
          #   Promise.reject err
         #  )
       @loginPromise = 
-      retry(@client.login(loginname, password), 
+      retry(() => @client.login(loginname, password), 
       {
         max_tries: 10
         interval: 1000
