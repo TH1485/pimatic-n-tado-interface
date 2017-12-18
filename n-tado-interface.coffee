@@ -2,10 +2,10 @@ module.exports = (env) ->
 
   # Require the  bluebird promise library
   Promise = env.require 'bluebird'
-  
   # Require the [cassert library](https://github.com/rhoot/cassert).
   assert = env.require 'cassert'
   tadoClient = require "./client.coffee"
+  retry = require 'bluebird-retry'
 
   
   class TadoPlugin2 extends env.plugins.Plugin
@@ -13,21 +13,34 @@ module.exports = (env) ->
     init: (app, @framework, @config) =>
       
       @client = new tadoClient
-      loginname=@config.loginname
-      password =@config.password
-      @framework.on 'after init', =>
-        @client.login(loginname, password).then( (connected) =>
-          env.logger.info("Login established, connected with tado web interface")
-          return @client.me().then( (home_info) =>
-            env.logger.info("acquired home_id: "+ home_info.homes[0].id)
-            @_setHome(home_info.homes[0])
-            Promise.resolve home_info.homes[0]
-            )
-          ).catch((err)->
-            env.logger.info(err)
-            Promise.reject err
+      loginname= @config.loginname
+      password = @config.password
+      #@framework.on 'after init', =>
+      #@client.login(loginname, password).then( (connected) =>
+         # env.logger.info("Login established, connected with tado web interface")
+         # return @client.me().then( (home_info) =>
+         #   env.logger.info("acquired home_id: "+ home_info.homes[0].id)
+         #   @_setHome(home_info.homes[0])
+         #   Promise.resolve home_info.homes[0]
+         #   )
+         # ).catch((err)->
+         #   env.logger.info(err)
+         #   Promise.reject err
+        #  )
+      @loginPromise = retry(@client.login(loginname, password), {max_tries: 10, interval: 1000, backoff: 2})
+        .then((connected) =>
+        env.logger.info("Login established, connected with tado web interface")
+        return @client.me().then( (home_info) =>
+          env.logger.info("acquired home_id: "+ home_info.homes[0].id)
+          @_setHome(home_info.homes[0])
+          Promise.resolve home_info.homes[0]
           )
-
+        ).catch((err) ->
+          env.logger.info(err)
+          Promise.reject err
+        )
+        
+        
       deviceConfigDef = require("./device-config-schema")
 
       @framework.deviceManager.registerDeviceClass("ZoneClimate", {
@@ -76,7 +89,7 @@ module.exports = (env) ->
     requestValue: ->
       if plugin.home?.id
         plugin.client.state(plugin.home.id, @zone).then((climate) =>
-          env.logger.info("state received: " + climate)
+          env.logger.info("state received: " + JSON.stringify(climate))
           @_temperature = climate.sensorDataPoints.insideTemperature.celsius
           @_humidity = climate.sensorDataPoints.humidity.percentage
           @emit "temperature", @_temperature
@@ -85,6 +98,7 @@ module.exports = (env) ->
         ).catch((err) =>
           env.logger.error(err)
           env.logger.info(plugin.home.id)
+          reject(err)
         )
       else 
         env.logger.info("no tado home id")
