@@ -17,7 +17,12 @@ module.exports = (env) ->
      
       @loginPromise =
         retry(() => @client.login(loginname, password),
-        {max_tries: 10, interval: 100, backoff: 2}
+        {
+          max_tries: 10
+          interval: 100
+          backoff: 2
+          predicate: ( (err) -> return err.error == "invalid_grant") 
+        }
         ).then((connected) =>
           env.logger.info("Login established, connected with tado web interface")
           return @client.me().then( (home_info) =>
@@ -109,6 +114,7 @@ module.exports = (env) ->
       #if plugin.home?.id
       plugin.loginPromise
       .then( (success) =>
+        env.logger.info("request login?!")
         return plugin.client.state(plugin.home.id, @zone)
         .then( (state) =>
           if @config.debug
