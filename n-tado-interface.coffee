@@ -34,7 +34,6 @@ module.exports = (env) ->
           env.logger.info("acquired home_id: "+ home_info.homes[0].id)
           @_setHome(home_info.homes[0])
           Promise.resolve home_info.homes[0]
-          )
         )
       ).catch((err) ->
         env.logger.info(err)
