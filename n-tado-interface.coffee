@@ -4,9 +4,9 @@ module.exports = (env) ->
   Promise = env.require 'bluebird'
   # Require the [cassert library](https://github.com/rhoot/cassert).
   assert = env.require 'cassert'
-  tadoClient = require "./client.coffee"
+  tadoClient = require './client.coffee'
   retry = require 'bluebird-retry'
-  commons = env.require "pimatic-plugin-commons"
+  commons = env.require 'pimatic-plugin-commons'
   
   class TadoPlugin2 extends env.plugins.Plugin
 
