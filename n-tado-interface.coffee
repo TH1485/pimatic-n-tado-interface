@@ -54,7 +54,7 @@ module.exports = (env) ->
             id = null
             for zone in zones
               if zone.type = "HEATING"
-                id = @base.generateDeviceId @framework, zone.name, id
+                id = @commons.base.generateDeviceId @framework, zone.name, id
                 config = {
                   class: ZoneClimate
                   id: id
@@ -113,7 +113,7 @@ module.exports = (env) ->
       #if plugin.home?.id
       plugin.loginPromise
       .then( (success) =>
-        env.logger.info("request login?!")
+        env.logger.debug("request login?!")
         return plugin.client.state(plugin.home.id, @zone)
         .then( (state) =>
           if @config.debug
