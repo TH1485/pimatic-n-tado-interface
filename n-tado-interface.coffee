@@ -35,10 +35,11 @@ module.exports = (env) ->
           @_setHome(home_info.homes[0])
           Promise.resolve home_info.homes[0]
           )
-        ).catch((err) ->
-          env.logger.info(err)
-          Promise.reject err
         )
+      ).catch((err) ->
+        env.logger.info(err)
+        Promise.reject err
+      )
         
         
       deviceConfigDef = require("./device-config-schema")
