@@ -39,12 +39,12 @@ module.exports = (env) ->
           return @client.me().then( (home_info) =>
             env.logger.debug("acquired home: "+ JSON.stringify(home_info))
             @setHome(home_info.homes[0])
-            resolve(home_info)
+            Promise.resolve(home_info)
           )
         ).catch((err) ->
           env.logger.debug("Could not connect to tado web interface")
-          env.logger.err(err)
-          reject(err)
+          env.logger.error(err)
+          Promise.reject(err)
         )
 
       deviceConfigDef = require("./device-config-schema")
@@ -103,12 +103,12 @@ module.exports = (env) ->
           @_humidity = climate.sensorDataPoints.humidity.percentage
           @emit "temperature", @_temperature
           @emit "humidity", @_humidity
-          resolve(climate)
+          Promise.resolve(climate)
         )        
       ).catch( (err) =>
         env.logger.error(err)
         env.logger.debug("homeId=:" +plugin.home.id)
-        reject(err)
+        Promise.reject(err)
       )
      
 
