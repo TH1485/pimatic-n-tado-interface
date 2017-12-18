@@ -31,7 +31,7 @@ module.exports = (env) ->
           env.logger.error("Could not connect to tado web interface", err)
           Promise.reject(err)
         )
-
+    
       deviceConfigDef = require("./device-config-schema")
 
       @framework.deviceManager.registerDeviceClass("ZoneClimate", {
@@ -40,10 +40,37 @@ module.exports = (env) ->
           device = new ZoneClimate(config, lastState)
           return device
       })
+      
+      @framework.deviceManager.on('discover', () =>
+        @loginPromise.then( (success) =>
+          @framework.deviceManager.discoverMessage("pimatic-n-tado, discovering zones..")
+          return @client.zones(@home.id).then( (zones) =>
+            id = null
+            for zone in zones
+              if zone.type = "HEATING"
+                id = @base.generateDeviceId @framework, zone.name, id
+                config =
+                  class: ZoneClimate
+                  id: id
+                  zone: zone.id
+                  name: zone.name
+                  interval: 120000
+                @framework.deviceManager.discoveredDevice(
+                'pimatic-n-tado', config.name, config
+                )
+            Promise.resolve(zones)
+          )
+        ).catch ( (err) =>
+          env.logger.error(err)
+        )
+      )     
+                
     
     setHome: (home) ->
       if home?
         @home = home
+       
+    
 
   plugin = new TadoPlugin2
 
