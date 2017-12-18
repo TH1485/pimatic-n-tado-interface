@@ -16,28 +16,27 @@ module.exports = (env) ->
       loginname= @config.loginname
       password = @config.password
      
-      @framework.on 'after init', =>
-        @loginPromise =
-          retry(() => @client.login(loginname, password),
-          {
-            max_tries: 10
-            interval: 100
-            backoff: 2
-            #predicate: ( (err) -> return err.error == "invalid_grant") 
-          }
-          ).then((connected) =>
-            env.logger.info("Login established, connected with tado web interface")
-            return @client.me().then( (home_info) =>
-              env.logger.info("acquired home: #{home_info.homes[0].name}")
-              if @config.debug
-                env.logger.debug(JSON.stringify(home_info))
-              @setHome(home_info.homes[0])
-              Promise.resolve(home_info)
-            )
-          ).catch((err) ->
-            env.logger.error("Could not connect to tado web interface", err)
-            Promise.reject(err)
+      @loginPromise =
+        retry(() => @client.login(loginname, password),
+        {
+          max_tries: 10
+          interval: 100
+          backoff: 2
+          #predicate: ( (err) -> return err.error == "invalid_grant") 
+        }
+        ).then((connected) =>
+          env.logger.info("Login established, connected with tado web interface")
+          return @client.me().then( (home_info) =>
+            env.logger.info("acquired home: #{home_info.homes[0].name}")
+            if @config.debug
+              env.logger.debug(JSON.stringify(home_info))
+            @setHome(home_info.homes[0])
+            Promise.resolve(home_info)
           )
+        ).catch((err) ->
+          env.logger.error("Could not connect to tado web interface", err)
+          Promise.reject(err)
+        )
     
       deviceConfigDef = require("./device-config-schema")
 
