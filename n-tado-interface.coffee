@@ -57,7 +57,7 @@ module.exports = (env) ->
               if zone.type = "HEATING"
                 id = @base.generateDeviceId @framework, zone.name, id
                 config = {
-                  class: ZoneClimate
+                  class: 'ZoneClimate'
                   id: id
                   zone: zone.id
                   name: zone.name
