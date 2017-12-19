@@ -54,7 +54,7 @@ module.exports = (env) ->
           return @client.zones(@home.id).then( (zones) =>
             id = null
             for zone in zones
-              if zone.type = "HEATING"
+              if zone.type = "HEATING" and zone.name != "Hot Water"
                 id = @base.generateDeviceId @framework, zone.name, id
                 config = {
                   class: 'ZoneClimate'
@@ -64,7 +64,7 @@ module.exports = (env) ->
                   interval: 120000
                 }
               @framework.deviceManager.discoveredDevice(
-                'pimatic-n-tado', config.name, config
+                'pimatic-n-tado', 'Zone: ' + config.name, config
               )
             Promise.resolve(zones)
           )
