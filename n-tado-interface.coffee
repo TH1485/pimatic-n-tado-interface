@@ -12,7 +12,7 @@ module.exports = (env) ->
 
     init: (app, @framework, @config) =>
       
-      @base= commons.base
+      @base= commons.base @, 'TadoPlugin2'
       @client = new tadoClient
       loginname= @config.loginname
       password = @config.password
@@ -28,7 +28,7 @@ module.exports = (env) ->
         ).then((connected) =>
           env.logger.info("Login established, connected with tado web interface")
           return @client.me().then( (home_info) =>
-            env.logger.info("acquired home: #{home_info.homes[0].name}")
+            env.logger.info("Connect to #{home_info.homes[0].name} with id: #{home_info.homes[0].id}")
             if @config.debug
               env.logger.debug(JSON.stringify(home_info))
             @setHome(home_info.homes[0])
